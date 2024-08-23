@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A550A8532C78F29B007C5246 /* BaskinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A550A8522C78F29B007C5246 /* BaskinViewController.swift */; };
 		A585CE972C71EB4D00C18A79 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A585CE962C71EB4D00C18A79 /* AppDelegate.swift */; };
 		A585CE992C71EB4D00C18A79 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A585CE982C71EB4D00C18A79 /* SceneDelegate.swift */; };
 		A585CE9B2C71EB4D00C18A79 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A585CE9A2C71EB4D00C18A79 /* ViewController.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A550A8522C78F29B007C5246 /* BaskinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaskinViewController.swift; sourceTree = "<group>"; };
 		A585CE932C71EB4D00C18A79 /* SimpleGame_package.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SimpleGame_package.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A585CE962C71EB4D00C18A79 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A585CE982C71EB4D00C18A79 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				A585CE962C71EB4D00C18A79 /* AppDelegate.swift */,
 				A585CE982C71EB4D00C18A79 /* SceneDelegate.swift */,
 				A585CE9A2C71EB4D00C18A79 /* ViewController.swift */,
+				A550A8522C78F29B007C5246 /* BaskinViewController.swift */,
 				A585CEAD2C71F19A00C18A79 /* Colors.swift */,
 				A585CEA22C71EB4E00C18A79 /* Assets.xcassets */,
 				A585CEA42C71EB4E00C18A79 /* LaunchScreen.storyboard */,
@@ -144,6 +147,7 @@
 				A585CEAE2C71F19A00C18A79 /* Colors.swift in Sources */,
 				A585CE972C71EB4D00C18A79 /* AppDelegate.swift in Sources */,
 				A585CEA12C71EB4D00C18A79 /* SimpleGame_package.xcdatamodeld in Sources */,
+				A550A8532C78F29B007C5246 /* BaskinViewController.swift in Sources */,
 				A585CE992C71EB4D00C18A79 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

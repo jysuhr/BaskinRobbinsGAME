@@ -25,3 +25,24 @@ extension UIColor {
         self.init(red: red, green: green, blue: blue, alpha: 1.0)
     }
 }
+
+/**
+ 색상 인스턴스 선언
+ */
+extension ViewController {
+    var bgColor1: UIColor{
+        return UIColor(hex: "#B7C5EA")
+    }
+    var laColor1: UIColor{
+        return UIColor(hex: "#FFFFFF")
+    }
+    var btColor1: UIColor{
+        return UIColor(hex: "#6B5CFF")
+    }
+}
+
+extension BaskinViewController {
+    var bgColor2: UIColor{
+        return UIColor(hex: "#EAD3B7")
+    }
+}
