@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ViewController: UIViewController {
     
@@ -30,16 +31,14 @@ class ViewController: UIViewController {
         titleRactangle.backgroundColor = laColor1
         titleRactangle.layer.cornerRadius = 25
         titleRactangle.layer.masksToBounds = true // 잘라낸 코너 부분을 보이지 않게 처리
-        titleRactangle.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(titleRactangle)
         
-        // TODO: SnapKit으로 레이아웃 설정하기
-        NSLayoutConstraint.activate([
-            titleRactangle.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 120),
-            titleRactangle.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
-            titleRactangle.widthAnchor.constraint(equalToConstant: 200),
-            titleRactangle.heightAnchor.constraint(equalToConstant: 50)
-        ])
+        titleRactangle.snp.makeConstraints {
+            $0.top.equalTo(self.view.snp.top).offset(120)
+            $0.centerX.equalTo(self.view.snp.centerX)
+            $0.width.equalTo(200)
+            $0.height.equalTo(50)
+        }
     }
     
     func titleLabelSetup() {
@@ -47,14 +46,11 @@ class ViewController: UIViewController {
         titleLabel.text = "게임 선택"
         titleLabel.font = UIFont.systemFont(ofSize: 26)
         titleLabel.textAlignment = .center
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(titleLabel)
         
-        // TODO: SnapKit으로 레이아웃 설정하기
-        NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: titleRactangle.centerXAnchor),
-            titleLabel.centerYAnchor.constraint(equalTo: titleRactangle.centerYAnchor)
-        ])
+        titleLabel.snp.makeConstraints {
+            $0.center.equalTo(titleRactangle)
+        }
     }
     
     func baskinRobbinsButtonSetup() {
@@ -63,7 +59,6 @@ class ViewController: UIViewController {
         baskinRobbinsButton.setTitle("베스킨라빈스31 게임", for: .normal)
         baskinRobbinsButton.setTitleColor(self.laColor1, for: .normal)
         baskinRobbinsButton.layer.cornerRadius = 16
-        baskinRobbinsButton.translatesAutoresizingMaskIntoConstraints = false
         self.view.addSubview(baskinRobbinsButton)
         
         // 버튼이 눌렸을 때의 색상 변경
@@ -73,13 +68,12 @@ class ViewController: UIViewController {
         // Button Action
         baskinRobbinsButton.addTarget(self, action: #selector(baskin), for: .touchUpInside)
         
-        // TODO: SnapKit으로 레이아웃 설정하기
-        NSLayoutConstraint.activate([
-            baskinRobbinsButton.centerXAnchor.constraint(equalTo: titleRactangle.centerXAnchor),
-            baskinRobbinsButton.topAnchor.constraint(equalTo: titleRactangle.bottomAnchor, constant: 100),
-            baskinRobbinsButton.widthAnchor.constraint(equalToConstant: 170),
-            baskinRobbinsButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
+        baskinRobbinsButton.snp.makeConstraints {
+            $0.centerX.equalTo(titleRactangle.snp.centerX)
+            $0.top.equalTo(titleRactangle.snp.bottom).offset(100)
+            $0.width.equalTo(170)
+            $0.height.equalTo(50)
+        }
     }
     
     @objc func buttonHighlighted(_ sender: UIButton) {

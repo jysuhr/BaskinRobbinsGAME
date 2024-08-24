@@ -45,4 +45,10 @@ extension BaskinViewController {
     var bgColor2: UIColor{
         return UIColor(hex: "#EAD3B7")
     }
+    var laColor1: UIColor{
+        return UIColor(hex: "#FFFFFF")
+    }
+    var numColor1: UIColor{
+        return UIColor(hex: "#296BCE")
+    }
 }

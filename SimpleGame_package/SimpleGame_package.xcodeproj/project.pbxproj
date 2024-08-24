@@ -15,7 +15,21 @@
 		A585CEA32C71EB4E00C18A79 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A585CEA22C71EB4E00C18A79 /* Assets.xcassets */; };
 		A585CEA62C71EB4E00C18A79 /* Base in Resources */ = {isa = PBXBuildFile; fileRef = A585CEA52C71EB4E00C18A79 /* Base */; };
 		A585CEAE2C71F19A00C18A79 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A585CEAD2C71F19A00C18A79 /* Colors.swift */; };
+		A597DCE92C79D671009F334B /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = A597DCE82C79D671009F334B /* SnapKit */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		A597DCED2C79D6BB009F334B /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		A550A8522C78F29B007C5246 /* BaskinViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaskinViewController.swift; sourceTree = "<group>"; };
@@ -35,6 +49,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A597DCE92C79D671009F334B /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -83,12 +98,16 @@
 				A585CE8F2C71EB4D00C18A79 /* Sources */,
 				A585CE902C71EB4D00C18A79 /* Frameworks */,
 				A585CE912C71EB4D00C18A79 /* Resources */,
+				A597DCED2C79D6BB009F334B /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = SimpleGame_package;
+			packageProductDependencies = (
+				A597DCE82C79D671009F334B /* SnapKit */,
+			);
 			productName = SimpleGame_package;
 			productReference = A585CE932C71EB4D00C18A79 /* SimpleGame_package.app */;
 			productType = "com.apple.product-type.application";
@@ -117,6 +136,9 @@
 				Base,
 			);
 			mainGroup = A585CE8A2C71EB4D00C18A79;
+			packageReferences = (
+				A597DCE32C79D4AD009F334B /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			productRefGroup = A585CE942C71EB4D00C18A79 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -363,6 +385,24 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		A597DCE32C79D4AD009F334B /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A597DCE82C79D671009F334B /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SnapKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		A585CE9F2C71EB4D00C18A79 /* SimpleGame_package.xcdatamodeld */ = {
