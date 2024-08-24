@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = bgColor1
-        print("Hello")
         
         titleRacSetup()
         titleLabelSetup()
@@ -45,6 +44,7 @@ class ViewController: UIViewController {
         // 타이틀 레이블 '게임 선택'
         titleLabel.text = "게임 선택"
         titleLabel.font = UIFont.systemFont(ofSize: 26)
+        titleLabel.textColor = .black
         titleLabel.textAlignment = .center
         self.view.addSubview(titleLabel)
         

@@ -72,4 +72,7 @@ extension BaskinViewController {
     var playColor: UIColor{
         return UIColor(hex: "#8C7A1E")
     }
+    var playColorDis: UIColor{
+        return UIColor(hex: "#39380F")
+    }
 }
