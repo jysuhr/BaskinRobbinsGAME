@@ -76,3 +76,9 @@ extension BaskinViewController {
         return UIColor(hex: "#39380F")
     }
 }
+
+extension MultipleViewController {
+    var bgColor3: UIColor{
+        return UIColor(hex: "#53BEB1")
+    }
+}
