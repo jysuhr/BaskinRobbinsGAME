@@ -45,4 +45,34 @@ extension BaskinViewController {
     var bgColor2: UIColor{
         return UIColor(hex: "#EAD3B7")
     }
+    var laColor1: UIColor{
+        return UIColor(hex: "#FFFFFF")
+    }
+    var laColor2: UIColor{
+        return UIColor(hex: "#9CE371")
+    }
+    var laColor3: UIColor{
+        return UIColor(hex: "#F3DD18")
+    }
+    var laColor4: UIColor{
+        return UIColor(hex: "#E57566")
+    }
+    var laColor5: UIColor{
+        return UIColor(hex: "#CD2008")
+    }
+    var numColor1: UIColor{
+        return UIColor(hex: "#296BCE")
+    }
+    var numColor2: UIColor{
+        return UIColor(hex: "#4078CB")
+    }
+    var numColor3: UIColor{
+        return UIColor(hex: "#FFFFFF")
+    }
+    var playColor: UIColor{
+        return UIColor(hex: "#8C7A1E")
+    }
+    var playColorDis: UIColor{
+        return UIColor(hex: "#39380F")
+    }
 }
