@@ -20,8 +20,16 @@ class BaskinViewController: UIViewController {
     let play2Button3 = UIButton()
     let gameOverLabel = UILabel()
     let winnerLabel = UILabel()
+    
+    let dynamicWatch = UIView()
+    let remainTimeLabel = UILabel()
+    let timerLabel = UILabel()
+    
     var gameNumber = 0
     var turnNumber: Bool = true
+    
+    var timer: Timer?
+    var remainingSeconds = 10
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +39,8 @@ class BaskinViewController: UIViewController {
         gameNumLabelSetup()
         playButtonSetup()
         updateButtonState()
-//        gameOverLabelSetup()
+        dynamicWatchSetup()
+        startTimer()
     }
     
     func circlePanelSetup() {
@@ -84,6 +93,18 @@ class BaskinViewController: UIViewController {
             // 애니메이션이 완료된 후의 동작
             print("Circle panel has expanded to cover the entire screen.")
         }
+
+        UIView.animate(withDuration: 1.4, delay: 0, options: .curveEaseInOut, animations: {
+            /// DynamicIsland가 좌우로 축소
+            self.dynamicWatch.snp.updateConstraints {
+                $0.height.equalTo(36.53)
+            }
+            // 레이아웃 강제 업데이트
+            self.view.layoutIfNeeded()
+        }) { completed in
+            // 애니메이션이 완료된 후의 동작
+            print("DynamicIsland was disappeared")
+        }
     }
 
     func gameNumLabelSetup() {
@@ -114,6 +135,67 @@ class BaskinViewController: UIViewController {
             $0.center.equalTo(circlePanel)
         }
     }
+    
+    func dynamicWatchSetup() {
+        /// 다이나믹 아일랜드
+        dynamicWatch.backgroundColor = .black
+        dynamicWatch.layer.cornerRadius = 36.53 / 2
+        self.dynamicWatch.clipsToBounds = true
+        self.view.addSubview(dynamicWatch)
+        
+        /// 제한시간 레이블
+        remainTimeLabel.text = "제한시간"
+        remainTimeLabel.textColor = laColor1
+        remainTimeLabel.font = UIFont.systemFont(ofSize: 14)
+        remainTimeLabel.textAlignment = .center
+        self.view.addSubview(remainTimeLabel)
+        
+        /// 타이머 레이블
+        timerLabel.text = "10"
+        timerLabel.textColor = .red
+        timerLabel.font = UIFont.systemFont(ofSize: 20)
+        timerLabel.textAlignment = .center
+        self.view.addSubview(timerLabel)
+        
+        dynamicWatch.snp.makeConstraints {
+            $0.width.equalTo(126)
+            $0.height.equalTo(36.53)
+            $0.top.equalTo(self.view.snp.top).offset(11)
+            $0.centerX.equalTo(self.view.snp.centerX)
+        }
+        remainTimeLabel.snp.makeConstraints {
+            $0.bottom.equalTo(dynamicWatch.snp.bottom).offset(-4)
+            $0.width.equalTo(55)
+            $0.height.equalTo(25)
+            $0.leading.equalTo(dynamicWatch.snp.leading).offset(10)
+        }
+        timerLabel.snp.makeConstraints {
+            $0.centerY.equalTo(remainTimeLabel.snp.centerY)
+            $0.width.equalTo(30)
+            $0.height.equalTo(25)
+            $0.trailing.equalTo(dynamicWatch.snp.trailing).offset(-8)
+        }
+        dynamicIslandAnimation()
+        
+    }
+    private func dynamicIslandAnimation() {
+        /// DynamicIsland 확장 애니메이션 적용
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 1.2, delay: 0, options: .curveEaseInOut, animations: {
+                /// DynamicIsland가 좌우로 확장
+                self.dynamicWatch.snp.updateConstraints {
+                    $0.height.equalTo(72)
+                }
+
+                // 레이아웃 강제 업데이트
+                self.view.layoutIfNeeded()
+            }) { completed in
+                // 애니메이션이 완료된 후의 동작
+                print("DynamicIsland was extended")
+            }
+        }
+    }
+    
     
     func gameOverLabelSetup() {
         switch turnNumber {
@@ -208,35 +290,37 @@ class BaskinViewController: UIViewController {
         let buttons2 = [play2Button1, play2Button2, play2Button3]
         // turnNumber | true: player1, false: player2
         buttons1.forEach {
-            switch turnNumber {
-            case true:
-                $0.isUserInteractionEnabled = true
-                $0.backgroundColor = playColor
-            case false:
-                $0.isUserInteractionEnabled = false
-                $0.backgroundColor = playColorDis
-            }
+            $0.isUserInteractionEnabled = turnNumber
+            $0.backgroundColor = turnNumber ? playColor : playColorDis
         }
         
         buttons2.forEach {
-            switch turnNumber {
-            case true:
-                $0.isUserInteractionEnabled = false
-                $0.backgroundColor = playColorDis
-            case false:
-                $0.isUserInteractionEnabled = true
-                $0.backgroundColor = playColor
-            }
+            $0.isUserInteractionEnabled = !turnNumber
+            $0.backgroundColor = !turnNumber ? playColor : playColorDis
         }
     }
     
-    // 버튼 누름 효과
-    @objc func buttonHighlighted(_ sender: UIButton) {
-        sender.backgroundColor = playColor.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
+    // 타이머 시작
+    func startTimer() {
+        timer?.invalidate()
+        remainingSeconds = 10
+        timerLabel.text = "\(remainingSeconds)"
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
     }
-    @objc func buttonNormal(_ sender: UIButton) {
-        sender.backgroundColor = playColorDis // 버튼이 정상 상태일 때의 색상
+    
+    // 타이머 갱신
+    @objc func updateTimer() {
+        remainingSeconds -= 1
+        timerLabel.text = "\(remainingSeconds)"
+        
+        if remainingSeconds <= 0 {
+            timer?.invalidate()
+            turnNumber.toggle()
+            updateButtonState()
+            startTimer()
+        }
     }
+
     // Button Action
     @objc func buttonTapped(_ sender: UIButton) {
         // 버튼의 타이틀을 숫자로 변환하여 gameNumber를 증가시킵니다
@@ -249,10 +333,21 @@ class BaskinViewController: UIViewController {
             circlePanelSetup()
             gameNumLabelSetup()
             if gameNumber >= 31 {
+                timer?.invalidate() // 게임 오버시 타이머 멈춤
                 gameOverLabelSetup()
                 gameOver()
+            } else {
+                startTimer() // 버튼이 눌렸을 때 타이머 재시작
             }
         }
+    }
+    
+    // 버튼 누름 효과
+    @objc func buttonHighlighted(_ sender: UIButton) {
+        sender.backgroundColor = playColor.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
+    }
+    @objc func buttonNormal(_ sender: UIButton) {
+        sender.backgroundColor = playColorDis // 버튼이 정상 상태일 때의 색상
     }
 }
 
