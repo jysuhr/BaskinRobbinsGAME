@@ -32,9 +32,13 @@ class MultipleViewController: UIViewController {
     let buttonEn = UIButton()
     let deleteImage = UIImage(named: "backspaceIcon")?.withRenderingMode(.alwaysTemplate)
 
-    var inputNum = ""
+    var inputNum = "정답 입력"
     var timer: Timer?
     var remainingSeconds = 30
+    
+    var randomA = 0
+    var randomB = 0
+    var quizzResult: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -142,8 +146,9 @@ class MultipleViewController: UIViewController {
      */
     
     func quizzLabelSetup() {
+        makeQuizz()
         quizzLabel.textColor = txtColor2
-        quizzLabel.text = "3 x 4"
+        quizzLabel.text = "\(randomA) x \(randomB)"
         quizzLabel.textAlignment = .center
         quizzLabel.font = UIFont.systemFont(ofSize: 50)
         self.view.addSubview(quizzLabel)
@@ -157,6 +162,7 @@ class MultipleViewController: UIViewController {
     func inputLabelSetup() {
         inputLabel.textColor = txtColor2
         inputLabel.text = inputNum // TODO: placeholder 배치
+//        inputLabel.text = inputNum.isEmpty ? "정답 입력" : inputNum
         inputLabel.textAlignment = .center
         inputLabel.font = UIFont.systemFont(ofSize: 30)
         self.view.addSubview(inputLabel)
@@ -168,6 +174,12 @@ class MultipleViewController: UIViewController {
         }
     }
     
+    func makeQuizz() {
+        randomA = Int.random(in: 1...10)
+        randomB = Int.random(in: 1...10)
+        quizzResult = randomA * randomB
+    }
+    
     // 버튼 누름 효과
     @objc func buttonHighlighted(_ sender: UIButton) {
         sender.backgroundColor = numberButtonColor.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
@@ -175,9 +187,11 @@ class MultipleViewController: UIViewController {
     @objc func buttonNormal(_ sender: UIButton) {
         sender.backgroundColor = numberButtonColor // 버튼이 정상 상태일 때의 색상
     }
-    
     // Button Action
     @objc func buttonTapped(_ sender: UIButton) {
+        if inputNum == "정답 입력" {
+            inputNum = ""
+        }
         // 버튼의 타이틀을 숫자로 변환하여 inputLabel에 입력
         if let buttonTitle = sender.title(for: .normal) {
             inputNum += buttonTitle
@@ -185,17 +199,36 @@ class MultipleViewController: UIViewController {
             inputLabelSetup()
         }
     }
-    
     @objc func deleteCh() {
-        // 마지막 문자 지우고, inputLabel업데이트
-        if !inputNum.isEmpty {
-            inputNum.removeLast()
-            inputLabel.text = inputNum
+        if inputNum == "정답 입력" {
+            print("버그 유발자")
+        } else {
+            // 마지막 문자 지우고, inputLabel업데이트
+            if !inputNum.isEmpty {
+                inputNum.removeLast()
+                inputLabel.text = inputNum
+            }
         }
     }
+    @objc func enterPressed() {
+        if Int(inputNum) == quizzResult {
+            print("정답")
+        } else {
+            print("오답")
+        }
+        inputNum = "정답 입력"
+        inputLabelSetup()
+        quizzLabelSetup()
+    }
+
 }
 
-
+/**
+ TODO list
+ - [ ] 답 입력 시 textPanel에 정오 표시 하기
+ - [ ] 30초 타이머 제한 걸기
+ - [ ] 타이머 끝나면 점수 알려주기
+*/
 
 extension MultipleViewController {
     func numberpadSetup() {
@@ -229,7 +262,6 @@ extension MultipleViewController {
             $0.layer.cornerRadius = 16
             $0.setTitleColor(self.txtColor1, for: .normal)
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 50)
-//            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
             $0.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
             $0.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
             self.view.addSubview($0)
@@ -239,6 +271,7 @@ extension MultipleViewController {
             }
         }
         buttonDe.addTarget(self, action: #selector(deleteCh), for: .touchUpInside)
+        buttonEn.addTarget(self, action: #selector(enterPressed), for: .touchUpInside)
         
         button1.setTitle("1", for: .normal)
         button2.setTitle("2", for: .normal)
@@ -250,7 +283,6 @@ extension MultipleViewController {
         button8.setTitle("8", for: .normal)
         button9.setTitle("9", for: .normal)
         button0.setTitle("0", for: .normal)
-//        buttonDe.setTitle("<-", for: .normal) // TODO: backspaceIcon으로 교체
         buttonDe.setImage(deleteImage, for: .normal)
         buttonDe.tintColor = txtColor2
         buttonDe.imageView?.contentMode = .scaleAspectFit

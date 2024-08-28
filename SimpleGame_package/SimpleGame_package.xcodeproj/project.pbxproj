@@ -79,10 +79,10 @@
 			children = (
 				A585CE962C71EB4D00C18A79 /* AppDelegate.swift */,
 				A585CE982C71EB4D00C18A79 /* SceneDelegate.swift */,
+				A585CEAD2C71F19A00C18A79 /* Colors.swift */,
 				A585CE9A2C71EB4D00C18A79 /* ViewController.swift */,
 				A550A8522C78F29B007C5246 /* BaskinViewController.swift */,
 				A59C7DB62C7B2F89009AEB0E /* MultipleViewController.swift */,
-				A585CEAD2C71F19A00C18A79 /* Colors.swift */,
 				A585CEA22C71EB4E00C18A79 /* Assets.xcassets */,
 				A585CEA42C71EB4E00C18A79 /* LaunchScreen.storyboard */,
 				A585CEA72C71EB4E00C18A79 /* Info.plist */,
