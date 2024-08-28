@@ -14,6 +14,7 @@ class ViewController: UIViewController {
     let titleRactangle = UIView()
     let titleLabel = UILabel()
     let baskinRobbinsButton = UIButton()
+    let multipleButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,7 @@ class ViewController: UIViewController {
         titleRacSetup()
         titleLabelSetup()
         baskinRobbinsButtonSetup()
+        multipleButtonSetup()
     }
     
     // MARK: - 컴포넌트 Setup
@@ -66,11 +68,34 @@ class ViewController: UIViewController {
         baskinRobbinsButton.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
         
         // Button Action
-        baskinRobbinsButton.addTarget(self, action: #selector(baskin), for: .touchUpInside)
+        baskinRobbinsButton.addTarget(self, action: #selector(gotoBaskinVC), for: .touchUpInside)
         
         baskinRobbinsButton.snp.makeConstraints {
             $0.centerX.equalTo(titleRactangle.snp.centerX)
             $0.top.equalTo(titleRactangle.snp.bottom).offset(100)
+            $0.width.equalTo(170)
+            $0.height.equalTo(50)
+        }
+    }
+    
+    func multipleButtonSetup() {
+        // 곱셈 게임 진입 버튼
+        multipleButton.backgroundColor = btColor1
+        multipleButton.setTitle("구구단 게임", for: .normal)
+        multipleButton.setTitleColor(self.laColor1, for: .normal)
+        multipleButton.layer.cornerRadius = 16
+        self.view.addSubview(multipleButton)
+        
+        // 버튼이 눌렸을 때의 색상 변경
+        multipleButton.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
+        multipleButton.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
+        
+        // Button Action
+        multipleButton.addTarget(self, action: #selector(gotoMultipleVC), for: .touchUpInside)
+        
+        multipleButton.snp.makeConstraints {
+            $0.centerX.equalTo(titleRactangle.snp.centerX)
+            $0.top.equalTo(baskinRobbinsButton.snp.bottom).offset(25)
             $0.width.equalTo(170)
             $0.height.equalTo(50)
         }
@@ -84,12 +109,17 @@ class ViewController: UIViewController {
         sender.backgroundColor = btColor1 // 버튼이 정상 상태일 때의 색상
     }
         
-    @objc func baskin() {
+    @objc func gotoBaskinVC() {
         print("베스킨라빈스 버튼이 눌림!!")
         let baskinVC = BaskinViewController()
         self.navigationController?.pushViewController(baskinVC, animated: true)
     }
     
+    @objc func gotoMultipleVC() {
+        print("구구단 게임 버튼이 눌림!!")
+        let multipleVC = MultipleViewController()
+        self.navigationController?.pushViewController(multipleVC, animated: true)
+    }
 }
 
 

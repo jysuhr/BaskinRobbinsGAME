@@ -30,7 +30,9 @@ class MultipleViewController: UIViewController {
     let button0 = UIButton()
     let buttonDe = UIButton()
     let buttonEn = UIButton()
+    let deleteImage = UIImage(named: "backspaceIcon")?.withRenderingMode(.alwaysTemplate)
 
+    var inputNum = ""
     var timer: Timer?
     var remainingSeconds = 30
     
@@ -138,7 +140,64 @@ class MultipleViewController: UIViewController {
         }
     }
      */
+    
+    func quizzLabelSetup() {
+        quizzLabel.textColor = txtColor2
+        quizzLabel.text = "3 x 4"
+        quizzLabel.textAlignment = .center
+        quizzLabel.font = UIFont.systemFont(ofSize: 50)
+        self.view.addSubview(quizzLabel)
+        quizzLabel.snp.makeConstraints {
+            $0.width.equalTo(180)
+            $0.height.equalTo(60)
+            $0.center.equalTo(textPanel.snp.center)
+        }
+    }
+    
+    func inputLabelSetup() {
+        inputLabel.textColor = txtColor2
+        inputLabel.text = inputNum // TODO: placeholder 배치
+        inputLabel.textAlignment = .center
+        inputLabel.font = UIFont.systemFont(ofSize: 30)
+        self.view.addSubview(inputLabel)
+        inputLabel.snp.makeConstraints {
+            $0.width.equalTo(200)
+            $0.height.equalTo(35)
+            $0.centerX.equalTo(textPanel.snp.centerX)
+            $0.top.equalTo(quizzLabel.snp.bottom).offset(10)
+        }
+    }
+    
+    // 버튼 누름 효과
+    @objc func buttonHighlighted(_ sender: UIButton) {
+        sender.backgroundColor = numberButtonColor.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
+    }
+    @objc func buttonNormal(_ sender: UIButton) {
+        sender.backgroundColor = numberButtonColor // 버튼이 정상 상태일 때의 색상
+    }
+    
+    // Button Action
+    @objc func buttonTapped(_ sender: UIButton) {
+        // 버튼의 타이틀을 숫자로 변환하여 inputLabel에 입력
+        if let buttonTitle = sender.title(for: .normal) {
+            inputNum += buttonTitle
+            inputLabel.text = inputNum
+            inputLabelSetup()
+        }
+    }
+    
+    @objc func deleteCh() {
+        // 마지막 문자 지우고, inputLabel업데이트
+        if !inputNum.isEmpty {
+            inputNum.removeLast()
+            inputLabel.text = inputNum
+        }
+    }
+}
 
+
+
+extension MultipleViewController {
     func numberpadSetup() {
         let buttons = [button1, button2, button3,
                        button4, button5, button6,
@@ -148,9 +207,9 @@ class MultipleViewController: UIViewController {
             $0.layer.cornerRadius = 16
             $0.setTitleColor(self.txtColor1, for: .normal)
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 50)
-//            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
-//            $0.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
-//            $0.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
+            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
+            $0.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
             self.view.addSubview($0)
 
         }
@@ -171,14 +230,15 @@ class MultipleViewController: UIViewController {
             $0.setTitleColor(self.txtColor1, for: .normal)
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 50)
 //            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
-//            $0.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
-//            $0.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
+            $0.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
+            $0.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
             self.view.addSubview($0)
             $0.snp.makeConstraints {
                 $0.width.equalTo(69)
                 $0.height.equalTo(195)
             }
         }
+        buttonDe.addTarget(self, action: #selector(deleteCh), for: .touchUpInside)
         
         button1.setTitle("1", for: .normal)
         button2.setTitle("2", for: .normal)
@@ -190,7 +250,10 @@ class MultipleViewController: UIViewController {
         button8.setTitle("8", for: .normal)
         button9.setTitle("9", for: .normal)
         button0.setTitle("0", for: .normal)
-        buttonDe.setTitle("<-", for: .normal) // TODO: backspaceIcon으로 교체
+//        buttonDe.setTitle("<-", for: .normal) // TODO: backspaceIcon으로 교체
+        buttonDe.setImage(deleteImage, for: .normal)
+        buttonDe.tintColor = txtColor2
+        buttonDe.imageView?.contentMode = .scaleAspectFit
         buttonEn.setTitle("En", for: .normal)
         
         button1.snp.makeConstraints {
@@ -246,35 +309,8 @@ class MultipleViewController: UIViewController {
         }
         
     }
-    
-    func quizzLabelSetup() {
-        quizzLabel.textColor = txtColor2
-        quizzLabel.text = "3 x 4"
-        quizzLabel.textAlignment = .center
-        quizzLabel.font = UIFont.systemFont(ofSize: 50)
-        self.view.addSubview(quizzLabel)
-        quizzLabel.snp.makeConstraints {
-            $0.width.equalTo(180)
-            $0.height.equalTo(60)
-            $0.center.equalTo(textPanel.snp.center)
-        }
-    }
-    
-    func inputLabelSetup() {
-        inputLabel.textColor = txtColor2
-        inputLabel.text = "12" // TODO: placeholder 배치
-        inputLabel.textAlignment = .center
-        inputLabel.font = UIFont.systemFont(ofSize: 30)
-        self.view.addSubview(inputLabel)
-        inputLabel.snp.makeConstraints {
-            $0.width.equalTo(100)
-            $0.height.equalTo(35)
-            $0.centerX.equalTo(textPanel.snp.centerX)
-            $0.top.equalTo(quizzLabel.snp.bottom).offset(10)
-        }
-    }
-    
 }
+
 
 
 
