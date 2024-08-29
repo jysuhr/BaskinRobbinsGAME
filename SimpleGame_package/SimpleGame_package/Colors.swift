@@ -96,4 +96,10 @@ extension MultipleViewController {
     var txtColor2: UIColor{
         return UIColor(hex: "#576D17")
     }
+    var CorrectColor: UIColor{
+        return UIColor(hex: "#1A61EA")
+    }
+    var IncorrectColor: UIColor{
+        return UIColor(hex: "#E62A2A")
+    }
 }

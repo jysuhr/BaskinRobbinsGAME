@@ -16,7 +16,7 @@ class MultipleViewController: UIViewController {
     let textPanel = UIView()
     let quizzLabel = UILabel()
     let inputLabel = UILabel()
-    
+
     /// 넘버패드
     let button1 = UIButton()
     let button2 = UIButton()
@@ -39,6 +39,7 @@ class MultipleViewController: UIViewController {
     var randomA = 0
     var randomB = 0
     var quizzResult: Int = 0
+    var correctCheck: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -162,7 +163,6 @@ class MultipleViewController: UIViewController {
     func inputLabelSetup() {
         inputLabel.textColor = txtColor2
         inputLabel.text = inputNum // TODO: placeholder 배치
-//        inputLabel.text = inputNum.isEmpty ? "정답 입력" : inputNum
         inputLabel.textAlignment = .center
         inputLabel.font = UIFont.systemFont(ofSize: 30)
         self.view.addSubview(inputLabel)
@@ -174,10 +174,31 @@ class MultipleViewController: UIViewController {
         }
     }
     
-    func makeQuizz() {
+    private func makeQuizz() {
         randomA = Int.random(in: 1...10)
         randomB = Int.random(in: 1...10)
         quizzResult = randomA * randomB
+    }
+    
+    func checkAnswer() {
+        /// 퀴즈레이블 정리
+        quizzLabel.snp.makeConstraints {
+            $0.height.equalTo(80)
+        }
+        quizzLabel.font = UIFont.systemFont(ofSize: 80)
+        switch correctCheck {
+        case true:
+            quizzLabel.textColor = CorrectColor
+            quizzLabel.text = "O"
+        case false:
+            quizzLabel.textColor = IncorrectColor
+            quizzLabel.text = "X"
+        }
+        /// input레이블 정리
+        inputNum = ""
+        inputLabelSetup()
+        // 레이아웃 강제 업데이트
+        self.view.layoutIfNeeded()
     }
     
     // 버튼 누름 효과
@@ -201,7 +222,7 @@ class MultipleViewController: UIViewController {
     }
     @objc func deleteCh() {
         if inputNum == "정답 입력" {
-            print("버그 유발자")
+            print("입력 없이 삭제눌림")
         } else {
             // 마지막 문자 지우고, inputLabel업데이트
             if !inputNum.isEmpty {
@@ -212,20 +233,25 @@ class MultipleViewController: UIViewController {
     }
     @objc func enterPressed() {
         if Int(inputNum) == quizzResult {
-            print("정답")
+            print("정답") // 삭제
+            correctCheck = true
         } else {
-            print("오답")
+            print("오답") // 삭제
+            correctCheck = false
         }
-        inputNum = "정답 입력"
-        inputLabelSetup()
-        quizzLabelSetup()
+        checkAnswer()
+        // 몇초 기다림
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+            self.quizzLabelSetup()
+            self.inputNum = "정답 입력"
+            self.inputLabelSetup()
+        }
     }
-
 }
 
 /**
  TODO list
- - [ ] 답 입력 시 textPanel에 정오 표시 하기
+ - [x] 답 입력 시 textPanel에 정오 표시 하기
  - [ ] 30초 타이머 제한 걸기
  - [ ] 타이머 끝나면 점수 알려주기
 */
