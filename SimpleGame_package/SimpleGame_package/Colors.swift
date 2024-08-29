@@ -84,8 +84,11 @@ extension MultipleViewController {
     var laColor1: UIColor{
         return UIColor(hex: "#FFFFFF")
     }
-    var panelColor: UIColor{
+    var panelColor1: UIColor{
         return UIColor(hex: "#CBFFEC")
+    }
+    var panelColor2: UIColor{
+        return UIColor(hex: "#43E0A8")
     }
     var numberButtonColor: UIColor{
         return UIColor(hex: "#EDE4B8")
@@ -95,6 +98,12 @@ extension MultipleViewController {
     }
     var txtColor2: UIColor{
         return UIColor(hex: "#576D17")
+    }
+    var bltxtColor: UIColor{
+        return UIColor(hex: "#000AFF")
+    }
+    var retxtColor: UIColor{
+        return UIColor(hex: "#FF0000")
     }
     var CorrectColor: UIColor{
         return UIColor(hex: "#1A61EA")

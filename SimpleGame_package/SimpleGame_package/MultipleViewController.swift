@@ -16,6 +16,10 @@ class MultipleViewController: UIViewController {
     let textPanel = UIView()
     let quizzLabel = UILabel()
     let inputLabel = UILabel()
+    let resultPanel = UIView()
+    let gameoverLabel = UILabel()
+    let correctresultLabel = UILabel()
+    let incorrectresultLabel = UILabel()
 
     /// 넘버패드
     let button1 = UIButton()
@@ -41,6 +45,9 @@ class MultipleViewController: UIViewController {
     var quizzResult: Int = 0
     var correctCheck: Bool = false
     
+    var correctCount = 0
+    var incorrectCount = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.view.backgroundColor = bgColor3
@@ -50,6 +57,9 @@ class MultipleViewController: UIViewController {
         numberpadSetup()
         quizzLabelSetup()
         inputLabelSetup()
+        
+        // 타이머 시작
+        startTimer()
     }
     
     func dynamicWatchSetup() {
@@ -113,7 +123,7 @@ class MultipleViewController: UIViewController {
     }
     
     func textPanelSetup() {
-        textPanel.backgroundColor = panelColor
+        textPanel.backgroundColor = panelColor1
         textPanel.layer.cornerRadius = 18
         self.view.addSubview(textPanel)
         
@@ -125,13 +135,13 @@ class MultipleViewController: UIViewController {
         }
     }
     
-    /*
     // 타이머 시작
     func startTimer() {
         timer?.invalidate()
-        remainingSeconds = 10
+        remainingSeconds = 30
         timerLabel.text = "\(remainingSeconds)"
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(updateTimer), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer!, forMode: .common)
     }
     
     // 타이머 갱신
@@ -140,11 +150,81 @@ class MultipleViewController: UIViewController {
         timerLabel.text = "\(remainingSeconds)"
         
         if remainingSeconds <= 0 {
-            timer?.invalidate()
-            startTimer()
+            timer?.invalidate() // 타이머 정지
+            // 게임오버 함수 호출
+            gameover()
         }
     }
-     */
+    
+    private func gameover() {
+        quizzLabel.isHidden = true
+        inputLabel.isHidden = true
+        /// textPanel 확장 애니메이션 적용
+        self.view.isUserInteractionEnabled = false
+        
+        UIView.animate(withDuration: 0.6, delay: 0, options: .curveEaseInOut, animations: {
+            // textPanel이 화면 전체를 채움
+            self.textPanel.snp.remakeConstraints {
+                $0.edges.equalToSuperview()
+            }
+
+            // 레이아웃 강제 업데이트
+            self.view.layoutIfNeeded()
+        }) { completed in
+            // 애니메이션이 완료된 후의 동작
+            print("textPanel이 확장됨")
+            self.resultScreenSetup()
+        }
+    }
+    
+    
+    private func resultScreenSetup() {
+        resultPanel.backgroundColor = panelColor2
+        resultPanel.layer.cornerRadius = 18
+        gameoverLabel.textColor = .black
+        gameoverLabel.text = "Game Over !!"
+        gameoverLabel.textAlignment = .center
+        gameoverLabel.font = UIFont.systemFont(ofSize: 50)
+        
+        self.view.addSubview(resultPanel)
+        self.view.addSubview(gameoverLabel)
+        
+        resultPanel.snp.makeConstraints {
+            $0.width.equalTo(300)
+            $0.height.equalTo(200)
+            $0.center.equalToSuperview()
+        }
+        let labels = [correctresultLabel, incorrectresultLabel]
+        labels.forEach {
+            $0.font = UIFont.systemFont(ofSize: 30)
+            $0.textAlignment = .center
+            self.view.addSubview($0)
+            $0.snp.makeConstraints {
+                $0.width.equalTo(250)
+                $0.height.equalTo(50)
+                $0.centerX.equalTo(resultPanel.snp.centerX)
+            }
+        }
+        correctresultLabel.textColor = bltxtColor
+        incorrectresultLabel.textColor = retxtColor
+        
+        correctresultLabel.text = "맞힌 문제: \(correctCount)개"
+        incorrectresultLabel.text = "틀린 문제: \(incorrectCount)개"
+        
+        gameoverLabel.snp.makeConstraints {
+            $0.width.equalTo(350)
+            $0.height.equalTo(100)
+            $0.centerX.equalTo(self.view.snp.centerX)
+            $0.top.equalTo(self.view.snp.top).offset(112)
+        }
+        correctresultLabel.snp.makeConstraints {
+            $0.top.equalTo(resultPanel.snp.top).offset(41)
+        }
+        incorrectresultLabel.snp.makeConstraints {
+            $0.top.equalTo(correctresultLabel.snp.bottom).offset(18)
+        }
+    }
+    
     
     func quizzLabelSetup() {
         makeQuizz()
@@ -162,7 +242,7 @@ class MultipleViewController: UIViewController {
     
     func inputLabelSetup() {
         inputLabel.textColor = txtColor2
-        inputLabel.text = inputNum // TODO: placeholder 배치
+        inputLabel.text = inputNum
         inputLabel.textAlignment = .center
         inputLabel.font = UIFont.systemFont(ofSize: 30)
         self.view.addSubview(inputLabel)
@@ -234,27 +314,22 @@ class MultipleViewController: UIViewController {
     @objc func enterPressed() {
         if Int(inputNum) == quizzResult {
             print("정답") // 삭제
+            correctCount += 1
             correctCheck = true
         } else {
             print("오답") // 삭제
+            incorrectCount += 1
             correctCheck = false
         }
         checkAnswer()
-        // 몇초 기다림
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+        // 0.4초 기다림
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.4) {
             self.quizzLabelSetup()
             self.inputNum = "정답 입력"
             self.inputLabelSetup()
         }
     }
 }
-
-/**
- TODO list
- - [x] 답 입력 시 textPanel에 정오 표시 하기
- - [ ] 30초 타이머 제한 걸기
- - [ ] 타이머 끝나면 점수 알려주기
-*/
 
 extension MultipleViewController {
     func numberpadSetup() {
