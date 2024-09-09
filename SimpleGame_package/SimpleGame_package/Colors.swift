@@ -129,6 +129,10 @@ extension UpDownViewController {
     var txtColorBl: UIColor{
         return UIColor(hex: "#3C1EF3")
     }
+    var txtColorGr: UIColor{
+        return UIColor(hex: "#008E06")
+    }
+    
     var numberButtonColor: UIColor{
         return UIColor(hex: "#EDE4B8")
     }

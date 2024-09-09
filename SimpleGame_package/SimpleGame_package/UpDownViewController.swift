@@ -11,7 +11,7 @@ import SnapKit
 class UpDownViewController: UIViewController {
     
     let gamePanel = UIView()
-    let gameInfoLabel = UILabel()
+    let gameLabel = UILabel()
     
     /// 넘버패드
     let button1 = UIButton()
@@ -29,6 +29,7 @@ class UpDownViewController: UIViewController {
     let deleteImage = UIImage(named: "backspaceIcon")?.withRenderingMode(.alwaysTemplate)
     
     var targetNum = 0
+    var inputNum = "숫자를 입력하세요\n(1~100)"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,37 +58,98 @@ class UpDownViewController: UIViewController {
     }
     
     func gameInfoLabelSetup() {
-        gameInfoLabel.textColor = txtColorBk
-        gameInfoLabel.text = "숫자를 입력하세요\n(1~100)"
-        gameInfoLabel.numberOfLines = 0
-        gameInfoLabel.textAlignment = .center
+        gameLabel.textColor = txtColorBk
+        gameLabel.text = "숫자를 입력하세요\n(1~100)"
+        gameLabel.numberOfLines = 0
+        gameLabel.textAlignment = .center
         // 초기 placeholder
-        gameInfoLabel.font = UIFont.systemFont(ofSize: 30)
-        self.view.addSubview(gameInfoLabel)
+        gameLabel.font = UIFont.systemFont(ofSize: 30)
+        self.view.addSubview(gameLabel)
         
-        gameInfoLabel.snp.makeConstraints {
+        gameLabel.snp.makeConstraints {
             $0.center.equalTo(gamePanel.snp.center)
             $0.width.equalTo(275)
             $0.height.equalTo(89)
         }
     }
     
-    // 버튼 누름 효과
-    @objc func buttonHighlighted(_ sender: UIButton) {
-        sender.backgroundColor = numberButtonColor.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
+    func gameLabelSetup() {
+        gameLabel.font = UIFont.systemFont(ofSize: 50)
+        gameLabel.text = inputNum
     }
-    @objc func buttonNormal(_ sender: UIButton) {
-        sender.backgroundColor = numberButtonColor // 버튼이 정상 상태일 때의 색상
+    
+    func correct() {
+        gameLabel.font = UIFont.systemFont(ofSize: 60)
+        gameLabel.textColor = txtColorGr
+        gameLabel.text = "정답 !!"
+    }
+    
+    func up() {
+        gameLabel.font = UIFont.systemFont(ofSize: 60)
+        gameLabel.textColor = txtColorRd
+        gameLabel.text = "UP"
+        inputNum = ""
+        // 2초 대기 후 실행
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.gameInfoLabelSetup()
+        }
+    }
+    
+    func down() {
+        gameLabel.font = UIFont.systemFont(ofSize: 60)
+        gameLabel.textColor = txtColorBl
+        gameLabel.text = "DOWN"
+        inputNum = ""
+        // 2초 대기 후 실행
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.gameInfoLabelSetup()
+        }
     }
     
     // Button Action
     @objc func buttonTapped(_ sender: UIButton) {
-         /**
-          입력한 숫자와 targetNum이 같은지 판단 & Up Down 알려주기
-          */
+        // 버튼의 타이틀을 숫자로 변환하여 inputLabel에 입력
+        if let buttonTitle = sender.title(for: .normal) {
+            if inputNum == "숫자를 입력하세요\n(1~100)" {
+                inputNum = ""
+            }
+            inputNum += buttonTitle
+            gameLabel.text = inputNum
+            gameLabelSetup()
+        }
     }
     
+    @objc func deleteCh() {
+        if inputNum == "숫자를 입력하세요\n(1~100)" {
+            print("입력 없이 삭제눌림")
+        } else {
+            // 마지막 문자 지우고, inputLabel업데이트
+            if !inputNum.isEmpty {
+                inputNum.removeLast()
+                gameLabel.text = inputNum
+            }
+        }
+    }
+    
+    @objc func enterPressed() {
+        guard let k = Int(inputNum) else {
+            print("Error")
+            return
+        }
+
+        switch k {
+        case targetNum:
+            correct()
+        case let x where x > targetNum:
+            down()
+        case let x where x < targetNum:
+            up()
+        default:
+            break
+        }
+    }
 }
+
 
 extension UpDownViewController {
     func numberpadSetup() {
@@ -99,7 +161,7 @@ extension UpDownViewController {
             $0.layer.cornerRadius = 16
             $0.setTitleColor(self.txtColorBk, for: .normal)
             $0.titleLabel?.font = UIFont.systemFont(ofSize: 50)
-//            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
+            $0.addTarget(self, action: #selector(buttonTapped(_: )), for: .touchUpInside)
             $0.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
             $0.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
             self.view.addSubview($0)
@@ -129,8 +191,8 @@ extension UpDownViewController {
                 $0.height.equalTo(195)
             }
         }
-//        buttonDe.addTarget(self, action: #selector(deleteCh), for: .touchUpInside)
-//        buttonEn.addTarget(self, action: #selector(enterPressed), for: .touchUpInside)
+        buttonDe.addTarget(self, action: #selector(deleteCh), for: .touchUpInside)
+        buttonEn.addTarget(self, action: #selector(enterPressed), for: .touchUpInside)
         
         button1.setTitle("1", for: .normal)
         button2.setTitle("2", for: .normal)
@@ -198,7 +260,14 @@ extension UpDownViewController {
             $0.top.equalTo(buttonDe.snp.bottom).offset(15)
             $0.leading.equalTo(button3.snp.trailing).offset(15)
         }
-        
+    }
+    
+    // 버튼 누름 효과
+    @objc func buttonHighlighted(_ sender: UIButton) {
+        sender.backgroundColor = numberButtonColor.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
+    }
+    @objc func buttonNormal(_ sender: UIButton) {
+        sender.backgroundColor = numberButtonColor // 버튼이 정상 상태일 때의 색상
     }
 }
 
