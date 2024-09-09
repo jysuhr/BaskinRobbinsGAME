@@ -15,6 +15,7 @@ class ViewController: UIViewController {
     let titleLabel = UILabel()
     let baskinRobbinsButton = UIButton()
     let multipleButton = UIButton()
+    let updownButton = UIButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,7 @@ class ViewController: UIViewController {
         titleLabelSetup()
         baskinRobbinsButtonSetup()
         multipleButtonSetup()
+        updownButtonSetup()
     }
     
     // MARK: - 컴포넌트 Setup
@@ -101,6 +103,29 @@ class ViewController: UIViewController {
         }
     }
     
+    func updownButtonSetup() {
+        // 업다운 게임 진입 버튼
+        updownButton.backgroundColor = btColor1
+        updownButton.setTitle("업다운 게임", for: .normal)
+        updownButton.setTitleColor(self.laColor1, for: .normal)
+        updownButton.layer.cornerRadius = 16
+        self.view.addSubview(updownButton)
+        
+        // 버튼이 눌렸을 때의 색상 변경
+        updownButton.addTarget(self, action: #selector(buttonHighlighted(_:)), for: [.touchDown, .touchDragEnter])
+        updownButton.addTarget(self, action: #selector(buttonNormal(_:)), for: [.touchUpInside, .touchDragExit, .touchCancel])
+        
+        // Button Action
+        updownButton.addTarget(self, action: #selector(gotoUpdownVC), for: .touchUpInside)
+        
+        updownButton.snp.makeConstraints {
+            $0.centerX.equalTo(titleRactangle.snp.centerX)
+            $0.top.equalTo(multipleButton.snp.bottom).offset(25)
+            $0.width.equalTo(170)
+            $0.height.equalTo(50)
+        }
+    }
+    
     @objc func buttonHighlighted(_ sender: UIButton) {
         sender.backgroundColor = btColor1.withAlphaComponent(0.7) // 버튼이 눌렸을 때의 색상
     }
@@ -119,6 +144,12 @@ class ViewController: UIViewController {
         print("구구단 게임 버튼이 눌림!!")
         let multipleVC = MultipleViewController()
         self.navigationController?.pushViewController(multipleVC, animated: true)
+    }
+    
+    @objc func gotoUpdownVC() {
+        print("업다운 게임 버튼이 눌림!!")
+        let updownVC = UpDownViewController()
+        self.navigationController?.pushViewController(updownVC, animated: true)
     }
 }
 

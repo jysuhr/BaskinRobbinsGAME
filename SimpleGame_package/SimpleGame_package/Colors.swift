@@ -112,3 +112,28 @@ extension MultipleViewController {
         return UIColor(hex: "#E62A2A")
     }
 }
+
+extension UpDownViewController {
+    var bgColor4: UIColor{
+        return UIColor(hex: "#FBA99E")
+    }
+    var panelColor: UIColor{
+        return UIColor(hex: "#FEF49E")
+    }
+    var txtColorBk: UIColor{
+        return UIColor(hex: "#000000")
+    }
+    var txtColorRd: UIColor{
+        return UIColor(hex: "#FF0000")
+    }
+    var txtColorBl: UIColor{
+        return UIColor(hex: "#3C1EF3")
+    }
+    var txtColorGr: UIColor{
+        return UIColor(hex: "#008E06")
+    }
+    
+    var numberButtonColor: UIColor{
+        return UIColor(hex: "#EDE4B8")
+    }
+}
